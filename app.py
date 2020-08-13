@@ -6,9 +6,6 @@ from utils.utils import get_table_template, router_page
 
 app = Flask(__name__)
 
-from environ import set_environ_variables
-set_environ_variables()
-
 # pages
 index_route = "/"
 customers_route = "/customers"
