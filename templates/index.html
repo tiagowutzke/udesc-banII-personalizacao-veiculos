@@ -1,0 +1,44 @@
+{% extends "head.html" %}
+
+{% block body %}
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100" style="text-align: center;">
+            <div class="table100">
+                    <div style="margin-bottom: 5%;" id="index-title">
+                        <h1 style="">{{ title }}</h1>
+                    </div>
+                    <button type="submit" class="index-buttons btn btn-outline-success">
+                        <a href="{{ url_for('new_tuning_page') }}">NOVA PERSONALIZAÇÃO</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-success">
+                        <a href="{{ url_for('tunning_page') }}">PERSONALIZAÇÕES</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('receivables_page') }}">FINANCEIRO</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('vehicles_customers_page') }}">VEÍCULOS PROPRIETÁRIOS</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('models_page') }}">VEÍCULOS MODELOS</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('customers_page') }}">CLIENTES</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('mechanics_page') }}">MECÂNICOS</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('services_page') }}">SERVIÇOS</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('auto_parts_page') }}">AUTO PEÇAS</a>
+                    </button><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
