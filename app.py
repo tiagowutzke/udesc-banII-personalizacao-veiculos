@@ -1,10 +1,13 @@
 import os
+
+from flask_cors import CORS
 from flask import Flask, render_template, request, redirect, url_for
 
 from database.database_adapter import DatabaseAdapter
 from utils.utils import get_table_template, router_page
 
 app = Flask(__name__)
+CORS(app)
 
 # pages
 index_route = "/"
