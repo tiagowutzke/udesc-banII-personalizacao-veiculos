@@ -100,8 +100,18 @@ LANGUAGE plpgsql;
 CREATE TRIGGER license_plate_check BEFORE INSERT OR UPDATE ON veiculos
 FOR EACH ROW EXECUTE PROCEDURE license_plate_check();
 
+-- Atualiza o estoque de auto peças após o cadastro de uma personalização
+CREATE OR REPLACE FUNCTION update_parts_quantity()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+	UPDATE pecas
+	SET quantidade = quantidade - 1
+	WHERE cod_peca = NEW.cod_peca;
+	RETURN NEW;
+END;
+$function$;
 
-
-
-
-
+CREATE TRIGGER update_parts_quantity AFTER
+INSERT ON personalizacoes_pecas FOR EACH ROW EXECUTE FUNCTION update_parts_quantity();
