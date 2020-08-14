@@ -15,7 +15,7 @@
                 </span>
             </span>
             <!-- Query skill field -->
-            <select class="custom-select skills" id="skills" onchange="new_option_field(this.value=='new-value', '#skills', '#new-skill', '#delete-skill', '#col2');" style="width:80%;">
+            <select class="custom-select skills" id="skills" onchange="new_option_field(this, '#skills', '#new-skill', '#delete-skill', '#col2');" style="width:80%;">
                 {% include "combo_box_template.html" %}
             </select>
             <!-- Delete -->

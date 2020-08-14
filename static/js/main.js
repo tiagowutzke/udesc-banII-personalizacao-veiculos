@@ -127,7 +127,6 @@
             }
           },
           error: function(response) {
-            console.log(xhr)
             if(response.status == 302){
                 window.alert('Registro inserido com sucesso!');
                 $("body").html(response);
