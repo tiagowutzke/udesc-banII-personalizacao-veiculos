@@ -126,8 +126,12 @@
                 $("body").html(response);
             }
           },
-          error: function(response) {
-            window.alert('Erro ao inserir:\n' + response);
+          error: function(response, textStatus, xhr) {
+            if(xhr == 302){
+                window.alert('Registro inserido com sucesso!');
+                $("body").html(response);
+            }
+            else window.alert('Erro ao inserir:\n' + response);
           }
        });
    }
