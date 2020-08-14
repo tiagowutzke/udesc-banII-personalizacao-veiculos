@@ -1,10 +1,6 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
 <!-- Query rows -->
 {% for tunning_id, customer_id, customer, vehicle_id, vehicle, date, date_edit, value, quotas in rows: %}
-    <tr style="font-size: 0.9em;" class="clickable" data-toggle="collapse" data-target=".details-{{tunning_id}}">
+    <tr style="font-size: 0.7em;" class="clickable" data-toggle="collapse" data-target=".details-{{tunning_id}}">
         <!-- Tunning id -->
         <td class="column1">
            <span style="display:block;" class="sm-size-field">{{tunning_id}}</span>

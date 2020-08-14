@@ -1,5 +1,7 @@
 {% extends "head.html" %}
 
+{% include "header-menu.html" %}
+
 {% block body %}
 
 <div class="limiter">
@@ -22,19 +24,7 @@
                         <a href="{{ url_for('vehicles_customers_page') }}">VEÍCULOS PROPRIETÁRIOS</a>
                     </button><br><br>
                     <button type="submit" class="index-buttons btn btn-outline-secondary">
-                        <a href="{{ url_for('models_page') }}">VEÍCULOS MODELOS</a>
-                    </button><br><br>
-                    <button type="submit" class="index-buttons btn btn-outline-secondary">
                         <a href="{{ url_for('customers_page') }}">CLIENTES</a>
-                    </button><br><br>
-                    <button type="submit" class="index-buttons btn btn-outline-secondary">
-                        <a href="{{ url_for('mechanics_page') }}">MECÂNICOS</a>
-                    </button><br><br>
-                    <button type="submit" class="index-buttons btn btn-outline-secondary">
-                        <a href="{{ url_for('services_page') }}">SERVIÇOS</a>
-                    </button><br><br>
-                    <button type="submit" class="index-buttons btn btn-outline-secondary">
-                        <a href="{{ url_for('auto_parts_page') }}">AUTO PEÇAS</a>
                     </button><br><br>
             </div>
         </div>

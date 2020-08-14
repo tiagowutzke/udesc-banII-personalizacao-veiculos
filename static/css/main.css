@@ -419,3 +419,6 @@ input[type=checkbox] {
     color: black;
 }
 
+#tbody, #tbody2 {
+    font-size: 1.1em;
+}

@@ -1,5 +1,7 @@
 {% extends "head.html" %}
 
+{% include "header-menu.html" %}
+
 {% block body %}
 <body>
 
@@ -10,7 +12,7 @@
                 <form action="{{ route }}" method="post">
                     <div style="display:-webkit-inline-box;width:100%;margin-bottom:2%">
                         <h1>{{ title }}</h1>
-                        <button style="margin-left:46em;border-width: 2px;" type="button" onclick="change_row_visibility(true);" class="btn btn-outline-success">Novo veículo</button>
+                        <button style="margin-left:40em;border-width: 2px;" type="button" onclick="change_row_visibility(true);" class="btn btn-outline-success">Novo veículo</button>
                     </div>
                     <table>
                         <thead>

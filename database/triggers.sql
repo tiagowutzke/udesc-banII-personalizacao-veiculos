@@ -19,20 +19,36 @@ FOR EACH ROW EXECUTE PROCEDURE receivable_check()
 
 -- Quando houver inserção de novas parcelas em um contas a receber
 -- atualiza o valor de total de parcelas
-CREATE OR REPLACE FUNCTION update_quota() RETURNS TRIGGER AS
-$$
+CREATE OR REPLACE FUNCTION update_quota()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
 BEGIN
 	UPDATE contas_receber
-	SET total_parcelas = NEW.total_parcelas
+	SET total_parcelas = (SELECT count(1) FROM contas_receber cr WHERE cod_recebimento = NEW.cod_recebimento)
 	WHERE cod_recebimento = NEW.cod_recebimento;
 	RETURN NEW;
 END;
-$$
-LANGUAGE plpgsql;
+$function$;
 
 CREATE TRIGGER update_quota BEFORE INSERT ON contas_receber
 FOR EACH ROW EXECUTE PROCEDURE update_quota()
 
+-- Em exclusão de parcelas no contas a receber, atualiza o total de parcelas
+CREATE OR REPLACE FUNCTION update_quota_on_delete()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+	UPDATE contas_receber
+	SET total_parcelas = OLD.total_parcelas - 1
+	WHERE cod_recebimento = OLD.cod_recebimento;
+	RETURN OLD;
+END;
+$function$;
+
+CREATE TRIGGER receivable_delete_check AFTER
+DELETE ON contas_receber FOR EACH ROW EXECUTE FUNCTION update_quota_on_delete();
 
 -- Não permitir inserção de novas personalizações se o cliente
 -- tiver mais de 5000 reais em parcelas atrasadas
@@ -83,3 +99,9 @@ LANGUAGE plpgsql;
 
 CREATE TRIGGER license_plate_check BEFORE INSERT OR UPDATE ON veiculos
 FOR EACH ROW EXECUTE PROCEDURE license_plate_check();
+
+
+
+
+
+
