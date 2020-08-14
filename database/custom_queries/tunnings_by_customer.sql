@@ -1,4 +1,4 @@
-SELECT
+SELECT DISTINCT
 	p.cod_personalizacao,
 	mc.descricao  ||' '|| m.descricao ||
 	'  R$ ' || p.valor_total || '  ' ||
