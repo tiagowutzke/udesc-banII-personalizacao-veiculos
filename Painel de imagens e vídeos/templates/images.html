@@ -1,0 +1,163 @@
+{% extends "head.html" %}
+
+{% include "header-menu.html" %}
+
+{% block body %}
+<body>
+<script>
+$(function () {
+    $('.btn-primary').popover({
+        animation: true,
+        placement: 'top',
+        content: 'Link copiado!'
+    })
+})
+</script>
+
+<div class="limiter" style="margin-top: 10em;">
+    <div class="content-page container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <h1>{{ title }}</h1><br>
+                <!-- Search files -->
+                <form class="form-search-files" method="post" action="{{ url_for('images_page') }}">
+                    <fieldset>
+                        <legend>Buscar imagens:</legend>
+                        <div style="display:flex;">
+                            <!-- Description -->
+                            <div>
+                                <span class="search-file-label" >Descrição:</span><br>
+                                <input type="text" id="description" name="description" style="height: 2.1em;" />
+                            </div>
+                            <!-- Subject -->
+                            <div style="margin-left: 3em;">
+                                <span class="search-file-label" >Assunto:</span><br>
+                                <select class="custom-select subjects" id="subjects" onchange="set_hidden_value(this, '#subject');" style="width:15em;">
+                                    <option selected>Nenhum assunto</option>
+                                    {% include "combo_box_template.html" %}
+                                </select>
+
+                                <input type="hidden" name="subject" id="subject" />
+                            </div>
+                            <!-- Button search -->
+                            <div><button type="submit" class="submit-search-files btn btn-outline-primary">Procurar</button></div>
+                            <div><button type="reset"  class="submit-search-files btn btn-outline-info"><a href="{{ url_for('images_page') }}">Limpar</a></button></div>
+                        </div>
+                    </fieldset>
+                </form>
+                {% for id, subject, subject_id, description, file_url in multimedia %}
+                    {% if (loop.index-1) % 3 == 0 or loop.index == 1 %}
+                        <br><div class="row">
+                    {% endif %}
+                            <div class="col">
+                                <div class="card" style="width: 18rem;">
+                                    <a href="#"><img src="{{file_url}}" class="card-img-custom card-img-top" alt="..." data-toggle="modal" data-target="#modal{{loop.index}}"></a>
+                                    <div class="card-body">
+                                        <span id="url{{loop.index}}" style="display:none;">{{file_url}}</span>
+
+                                        <h5 id="card-title-{{loop.index}}" class="card-title">{{description}}</h5>
+                                        <input type="text" id="edit-description-{{loop.index}}" value="{{description}}" style="display:none;" name="description" style="height: 2em;" />
+
+                                        <p id="card-subject-{{loop.index}}" class="card-text">
+                                            <img src="{{ url_for('static', filename='images/icons/tag.png') }}" />
+                                            {{subject}}
+                                        </p>
+                                        <select class="custom-select subjects" id="subjects-{{loop.index}}" onchange="set_hidden_value(this, '#subject-{{loop.index}}');" style="width:15em;display:none;">
+                                            {% with default=subject_id %}
+                                                {% include "combo_box_template.html" %}
+                                            {% endwith %}
+                                        </select>
+                                        <input type="hidden" id="subject-{{loop.index}}" name="subject" />
+                                        <script>$('#subjects-{{loop.index}}').trigger('change');</script>
+
+                                        <div>
+                                            <a href="#" onclick="copy_clipboard('#url{{loop.index}}')" class="card-btn-custom btn btn-primary" data-container="body" data-toggle="popover">Copiar link</a>
+                                            <!-- Delete -->
+                                            <span id="delete{{loop.index}}" onclick="delete_file('images',{{loop.index}}, {{id}})" style="display:inline; float: right;">
+                                                <img class="card-btn-delete" src="{{ url_for('static', filename='images/delete.png') }}" />
+                                            </span>
+                                            <!-- Save (hide) -->
+                                            <span id="save{{loop.index}}" onclick="update_file('images', {{loop.index}}, {{id}})" style="display: none; float: right;">
+                                                <img class="card-btn-delete" src="{{ url_for('static', filename='images/save.png') }}" />
+                                            </span>
+                                            <!-- Cancel (hide) -->
+                                            <span id="cancel{{loop.index}}" onclick="edit_file(false, {{loop.index}})" style="display: none; float: right; margin-right:0.5em;">
+                                                <img class="card-btn-delete" src="{{ url_for('static', filename='images/cancel.png') }}" />
+                                            </span>
+                                            <!-- Edit -->
+                                            <span id="edit{{loop.index}}" onclick="edit_file(true, {{loop.index}});" style="display:inline; float: right;">
+                                                <img class="card-btn-delete" src="{{ url_for('static', filename='images/edit.png') }}" />
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--Modal: Name-->
+                                <div class="modal fade" id="modal{{loop.index}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-lg" role="document">
+                                    <!--Content-->
+                                    <div class="modal-content">
+                                      <!--Body-->
+                                      <div class="modal-body mb-0 p-0">
+                                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half" style="height:30em;">
+                                          <img class="embed-responsive-item" src="{{file_url}}" />
+                                        </div>
+                                      </div>
+                                      <!--Footer-->
+                                      <div class="modal-footer justify-content-center">
+                                        <span class="mr-4">{{description}}</span>
+                                        <button type="button" class="btn btn-outline-primary btn-rounded btn-md ml-4" data-dismiss="modal">Fechar</button>
+                                      </div>
+                                    </div>
+                                    <!--/.Content-->
+                                  </div>
+                                </div>
+                                <!--Modal: Name-->
+                            </div>
+                    {% if loop.index % 3 == 0 or loop.index == multimedia | length %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if page == 1 %}
+                {% set status = 'disabled' %}
+                {% set activeA = 'active' %}
+                {% set activeB = '' %}
+                {% set pageA = 1 %}
+                {% set pageB = 2 %}
+                {% set pageC = 3 %}
+                {% set currentA = '(current)' %}
+                {% set currentB = '' %}
+            {% else %}
+                {% set activeA = '' %}
+                {% set activeB = 'active' %}
+                {% set pageA = page-1 %}
+                {% set pageB = page %}
+                {% set pageC = page+1 %}
+                {% set currentA = '' %}
+                {% set currentB = '(current)' %}
+            {% endif %}
+
+            <!-- Pagination html -->
+            <nav aria-label="" style="padding: 3em 40%;">
+              <ul class="pagination">
+
+                <li class="page-item {{status}}"><a class="page-link" href="{{ url_for('images_page') }}?page={{pageA-1}}" tabindex="-1">Previous</a></li>
+
+                <li class="page-item {{activeA}}"><a class="page-link" href="{{ url_for('images_page') }}?page={{pageA}}">{{pageA}} <span class="sr-only">{{currentA}}</span></a></li>
+                <li class="page-item {{activeB}}"><a class="page-link" href="{{ url_for('images_page') }}?page={{pageB}}">{{pageB}} <span class="sr-only">{{currentB}}</span></a></li>
+                <li class="page-item"><a class="page-link" href="{{ url_for('images_page') }}?page={{pageC}}">{{pageC}}</a></li>
+
+                <li class="page-item"><a class="page-link" href="{{ url_for('images_page') }}?page={{pageC+1}}">Next</a></li>
+              </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
+
+{% endblock %}
