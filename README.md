@@ -2,11 +2,11 @@
 
 Projeto final para  a disciplina de banco de dados II da Universidade Estadual de Santa Catarina (UDESC)
 
-Este projeto está em produção no heroku. Você pode testar o aplicativo de forma online [aqui](https://nasa-challenge-flask-example.herokuapp.com/).
+Este projeto está em produção no heroku. Você pode testar o aplicativo de forma online [aqui](https://ban2-personalizacao-veiculos.herokuapp.com/).
 
 ## Escopo
-O projeto visa implementar um sistema de controle para personalização de veículos, contendo o registro persistente de clientes, 
-mecânicos, veículos e serviços de personalização realizados, além de também conter o registro de contas a receber 
+O projeto visa implementar um sistema de controle para personalização de veículos, contendo o registro persistente de clientes,
+mecânicos, veículos e serviços de personalização realizados, além de também conter o registro de contas a receber
 referentes às personalizações realizadas.
 
 ## Requisitos
@@ -24,14 +24,14 @@ Implementação dos seguintes controles em contas a receber:
 
 #### Impedir a inserção de contas a receber duplicados
 
-Pode existir um id de contas a receber por personalização de veículo realizada. Em caso de 
-pagamento parcelado, deve ser inserido um novo registro para o id já existente e informar o numerp da parcela no 
+Pode existir um id de contas a receber por personalização de veículo realizada. Em caso de
+pagamento parcelado, deve ser inserido um novo registro para o id já existente e informar o numerp da parcela no
 campo `num_parcela` (por este motivo que este campo faz parte da chave primária da tabela de contas a receber).
 
 #### Atualizar o total de parcelas
 
 Na necessidade de inserção de novo contas a receber de uma personalização de veículo, é necessário atualizar o campo
-`total_parcelas` nos registros de contas a receber já existentes para que fique de acordo 
+`total_parcelas` nos registros de contas a receber já existentes para que fique de acordo
 após a inserção das novas parcelas.
 
 #### Tratamento de inadimplentes
@@ -71,4 +71,4 @@ A fonte dos gatilhos estão disponíveis no arquivo [triggers.sql](database/trig
 - Front-end da aplicação
 
 **Postgres**
-- Persistência dos dados 
+- Persistência dos dados
