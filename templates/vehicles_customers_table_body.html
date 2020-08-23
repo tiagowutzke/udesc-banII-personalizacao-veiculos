@@ -1,0 +1,144 @@
+<!-- New row -->
+    <tr id='new-row' style="font-size: 0.9em;display:none;background: #bae4ba;">
+        <!-- Model combo box -->
+        <td class="column1 sm4x-size-field" style="display: -webkit-inline-box; top: 0.4em;">
+            <!-- Model value to be updated -->
+            <input type="hidden" value="{{model_id}}" name="cod_modelo" id="col1">
+            <span id="col9" class="sm2x-size-field">
+                <!-- Query model field -->
+                <select class="custom-select models sm3x-size-field" id="models" onchange="new_option_field(this, '#models', '#new-model', '#delete-model', '#col1');">
+                    {% with combo_box=combo_box1 %}
+                        {% include "combo_box_template.html" %}
+                    {% endwith %}
+                </select>
+            </span>
+        </td>
+        <!-- Customer combo box -->
+        <td class="column3">
+           <!-- Customer id to be updated -->
+           <input type="hidden" value="{{customer_id}}" name="cpf_cliente" id="col2">
+           <span id="col10" class="sm2x-size-field">
+                <!-- Query model field -->
+                <select class="custom-select models sm3x-size-field" id="customers" onchange="new_option_field(this, '#models', '#new-model', '#delete-model', '#col2');">
+                    {% with combo_box=combo_box2 %}
+                        {% include "combo_box_template.html" %}
+                    {% endwith %}
+                </select>
+            </span>
+        </td>
+        <!-- Chassi -->
+        <td class="column3">
+            <input type="text" class="hidden-field sm2x-size-field" name="chassi" id="col3" />
+        </td>
+        <!-- Plate -->
+        <td class="column2">
+            <input type="text" class="sm-center-field hidden-field" name="placa" id="col4" />
+        </td>
+        <!-- Color -->
+        <td class="column2">
+            <input type="text" class="sm-center-field hidden-field" name="cor" id="col5" />
+        </td>
+        <!-- Year -->
+        <td class="column2">
+            <input type="number" class="sm-center-field hidden-field" name="ano_fabricacao" id="col6" />
+        </td>
+        <!-- Fuel -->
+        <td class="column2">
+            <input type="text" class="sm-center-field hidden-field" name="combustivel" id="col7" />
+        </td>
+        <!-- Km -->
+        <td class="column2">
+            <input type="number" class="sm-center-field hidden-field" name="kilometragem" id="col8" />
+        </td>
+        <td class="actions-column column6" >
+            <!-- Cancel -->
+            <span id="cancel-new" onclick="change_row_visibility(false)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-new" onclick="insert_row('veiculos', 8)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+<!-- Query rows -->
+{% for chassi, plate, year, color, fuel, km, customer, model, model_id, customer_id in rows: %}
+    <tr style="font-size: 0.9em;">
+        <!-- Model combo box -->
+        <td class="column1 sm4x-size-field" style="display: -webkit-inline-box; top: 0.4em;">
+            <span class="visible-field-{{plate}} sm2x-size-field">{{model}}</span>
+            <!-- Model value to be updated -->
+            <input type="hidden" value="{{model_id}}" name="cod_modelo" id="col1-{{plate}}">
+            <span id="col9-{{plate}}" class="sm2x-size-field" style="display: none;">
+                <!-- Query model field -->
+                <select class="custom-select models sm3x-size-field" id="models-query" onchange="new_option_field(this, '#models-query', '#new-model-query', '#delete-model-query', '#col1-{{plate}}');">
+                    {% with combo_box=combo_box1, default=model_id %}
+                        {% include "combo_box_template.html" %}
+                    {% endwith %}
+                </select>
+            </span>
+        </td>
+        <!-- Customer -->
+        <td class="column3">
+           <span style="display:block;" class="visible-field-{{plate}} sm3x-size-field">{{customer}}</span>
+           <!-- Model value to be updated -->
+           <input type="hidden" value="{{customer_id}}" name="cpf_cliente" id="col2-{{plate}}">
+           <span id="col10-{{plate}}" class="sm2x-size-field" style="display: none;">
+                <!-- Query model field -->
+                <select class="custom-select models sm3x-size-field" id="customers-query" onchange="new_option_field(this, '#models-query', '#new-model-query', '#delete-model-query', '#col2-{{plate}}');">
+                    {% with combo_box=combo_box2, default=customer_id %}
+                        {% include "combo_box_template.html" %}
+                    {% endwith %}
+                </select>
+            </span>
+        </td>
+        <!-- Chassi -->
+        <td class="column3">
+            <span class="visible-field-{{plate}} sm2x-size-field" style="display: block;">{{chassi}}</span>
+            <input type="text" class="hidden-field sm2x-size-field" name="chassi" value="{{chassi}}" id="col3-{{plate}}" />
+        </td>
+        <!-- Plate -->
+        <td class="column2">
+            <span style="display:block;" class="visible-field-{{plate}} sm-center-field">{{plate}}</span>
+            <input type="text" class="sm-center-field hidden-field" name="placa" value="{{plate}}" id="col4-{{plate}}" />
+        </td>
+        <!-- Color -->
+        <td class="column2">
+            <span style="display:block;" class="visible-field-{{plate}} sm-center-field" >{{color}}</span>
+            <input type="text" class="sm-center-field hidden-field" name="cor" value="{{color}}" id="col5-{{plate}}" />
+        </td>
+        <!-- Year -->
+        <td class="column2">
+            <span style="display:block;" class="visible-field-{{plate}} sm-center-field">{{year}}</span>
+            <input type="number" class="sm-center-field hidden-field" name="ano_fabricacao" value="{{year}}" id="col6-{{plate}}" />
+        </td>
+        <!-- Fuel -->
+        <td class="column2">
+            <span style="display:block;" class="visible-field-{{plate}} sm-center-field">{{fuel}}</span>
+            <input type="text" class="sm-center-field hidden-field" name="combustivel" value="{{fuel}}" id="col7-{{plate}}" />
+        </td>
+        <!-- Km -->
+        <td class="column2">
+            <span style="display:block;" class="visible-field-{{plate}} sm-center-field">{{km}}</span>
+            <input type="number" class="sm-center-field hidden-field" name="kilometragem" value="{{km}}" id="col8-{{plate}}" />
+        </td>
+        <td class="actions-column column6">
+            <!-- Edit -->
+            <span id="edit-{{plate}}" onclick="change_fields_visibility('{{plate}}', true)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/edit.png') }}" />
+            </span>
+            <!-- Delete -->
+            <span id="delete-{{plate}}" onclick="delete_row('veiculos', 'placa', '{{plate}}')">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/delete.png') }}" />
+            </span>
+            <!-- Cancel -->
+            <span id="cancel-{{plate}}" onclick="change_fields_visibility('{{plate}}', false)" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-{{plate}}" onclick="update_row('{{plate}}', 'veiculos', 'placa', 8)" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+{% endfor %}

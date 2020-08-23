@@ -1,0 +1,11 @@
+{% for id, value, description in combo_box: %}
+    {% if id == default %}
+        {% set selected = 'selected' %}
+    {% else %}
+        {% set selected = '' %}
+    {% endif %}
+    <option {{selected}} id="{{ id }}" value="{{ value }}">{{ description }}</option>
+{% endfor %}
+{% if new_value %}
+    <option value="new-value">(+) {{ new_value }}</option>
+{% endif %}

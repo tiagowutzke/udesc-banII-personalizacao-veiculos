@@ -1,0 +1,102 @@
+<!-- New row -->
+    <tr id='new-row' style="font-size: 0.9em;display:none;background: #bae4ba; height: 5em;">
+        <!-- Customer combo box -->
+        <td class="column1" style="" colspan="5">
+            <div style="display:inline-flex;">
+                <!-- Customer value to be updated -->
+                <span id="col7" class="sm2x-size-field">
+                    <script>
+                    function set_default_receivable() {
+                        $('#tunnings').trigger('change');
+                    }
+                    </script>
+                    <span>Cliente</span><br>
+                     <select class="custom-select brands sm3x-size-field" id="customer" onchange="get_combo_values(this, 'tunnings-by-customer', '#tunnings'); window.setTimeout( set_default_receivable, 5000);set_hidden_value(this, '#col2');" style="margin-right: 2em;">
+                        <option selected disabled>Escolha um cliente</option>
+                        {% include "combo_box_template.html" %}
+                    </select>
+                </span>
+                <!-- Tunnings by selected customer -->
+                <!-- Tunning value to be updated -->
+                <input type="hidden" name="cod_personalizacao" id="col1"/>
+                <input type="hidden" name="cpf_cliente" id="col2"/>
+                <span id="col8" style="margin-left: 5em">
+                     <span>Personalizações</span><br>
+                     <select class="custom-select" id="tunnings" onchange="set_hidden_value(this, '#col1');" style="width: 20em;">
+                        <option selected disabled>Escolha um cliente</option>
+                    </select>
+                </span>
+                <!-- Value -->
+                <span id="col9" style="margin-left: 1em">
+                     <span>Valor</span><br>
+                     <input type="number" style="height:2.3em;" class="hidden-field sm2x-size-field" name="valor_parcela" id="col3" />
+                </span>
+                <!-- Due date -->
+                <span id="col10" style="margin-left: 1em">
+                     <span>Valor</span><br>
+                     <input type="date" style="max-width:11em;" class="form-control hidden-field sm4x-size-field" name="data_vencimento" id="col4" />
+                </span>
+            </div>
+        </td>
+        <td class="actions-column column6" style="padding-top:2em;">
+            <!-- Cancel -->
+            <span id="cancel-new" onclick="change_row_visibility(false)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-new" onclick="insert_new_receivable(4)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+<!-- Query rows -->
+{% for receivable_id, customer, quota, total_quotas, quota_value, due_date, due_date_formated, quote_payed in rows: %}
+    <tr style="font-size: 0.9em;">
+        <!-- Customer -->
+        <td class="column1">
+            <span style="display:block;" class="sm2x-size-field">{{customer}}</span>
+        </td>
+        <!-- Quota-->
+        <td class="column3">
+            <span class="sm-size-field" style="display: block;">{{quota}} / {{total_quotas}}</span>
+        </td>
+        <!-- Quota value -->
+        <td class="column3">
+            <span style="display:block;" class="visible-field-{{receivable_id}}{{quota}} sm-size-field">{{quota_value}}</span>
+            <input type="number" class="hidden-field sm2x-size-field" name="valor_parcela" value="{{quota_value}}" id="col1-{{receivable_id}}{{quota}}" />
+        </td>
+        <!-- Due date -->
+        <td class="column3">
+            <span style="display:block;" class="visible-field-{{receivable_id}}{{quota}} sm2x-size-field">{{due_date_formated}}</span>
+            <input type="date" class="form-control hidden-field sm3x-size-field" name="data_vencimento" value="{{due_date}}" id="col2-{{receivable_id}}{{quota}}" />
+        </td>
+        <!-- Qutoe payed -->
+        {% if quote_payed: %}
+        {%   set checkbox_flag = 'checked' %}
+        {% else: %}
+        {%   set checkbox_flag = '' %}
+        {% endif %}
+        <td class="column3">
+            <input type="checkbox" disabled style="display:block;" class="visible-field-{{receivable_id}}{{quota}} sm-size-field" {{checkbox_flag}} />
+            <input type="checkbox" onclick="set_checkbox_value(this);" value="false" class="hidden-field sm-size-field" name="parcela_paga" id="col3-{{receivable_id}}{{quota}}" />
+        </td>
+        <td class="actions-column column6">
+            <!-- Edit -->
+            <span id="edit-{{receivable_id}}{{quota}}" onclick="change_fields_visibility('{{receivable_id}}{{quota}}', true)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/edit.png') }}" />
+            </span>
+            <!-- Delete -->
+            <span id="delete-{{receivable_id}}{{quota}}" onclick="delete_row('contas_receber', 'cod_recebimento = {{receivable_id}} and num_parcela', '{{quota}}')">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/delete.png') }}" />
+            </span>
+            <!-- Cancel -->
+            <span id="cancel-{{receivable_id}}{{quota}}" onclick="change_fields_visibility('{{receivable_id}}{{quota}}', false)" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-{{receivable_id}}{{quota}}" onclick="update_row('{{receivable_id}}{{quota}}', 'contas_receber', 'num_parcela = {{quota}} and cod_recebimento = {{receivable_id}} and {{receivable_id}}{{quota}}', 3)" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+{% endfor %}

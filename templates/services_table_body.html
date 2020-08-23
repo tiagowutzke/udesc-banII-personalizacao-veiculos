@@ -1,0 +1,100 @@
+<!-- New row -->
+    <tr id='new-row' style="font-size: 0.9em;display:none;background: #bae4ba;">
+        <td class="column1"><input class="md-size-field" type="text" name="descricao" id="col1" /></td>
+        <td class="column3"><input type="number" name="valor" id="col2" />
+        </td>
+        <td class="column3">
+            <!-- New skill field -->
+            <span id="new-skill" style="display:none;">
+                <input type="text" id='new-skill-value' name="new-skill" style="display: inline;" />
+                <!-- Cancel -->
+                <span id="cancel-new-skill" onclick="swap_elements_visibility('#new-skill', '#skills');" style="display: inline;bottom: 0.2em;">
+                    <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+                </span>
+                <!-- Save -->
+                <span id="save-new-skill" onclick="insert_combo_value('especialidade', 'cod_especialidade', 'nome', $('#new-skill-value').val(), '.skills'); swap_elements_visibility('#new-skill', '#skills');" style="display: inline;bottom: 0.2em;">
+                    <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+                </span>
+            </span>
+            <!-- Query skill field -->
+            <select class="custom-select skills" id="skills" onchange="new_option_field(this, '#skills', '#new-skill', '#delete-skill', '#col3');" style="width:80%;">
+                {% include "combo_box_template.html" %}
+            </select>
+            <!-- Delete -->
+            <span id="delete-skill" onclick="delete_row('especialidade', 'cod_especialidade', $('#skills').children('option:selected').val(), '.skills')" style="display:inline;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/delete.png') }}" />
+            </span>
+            <!-- Skill value to be inserted -->
+            <input type="hidden" value="1" name="cod_especialidade" id="col3">
+        </td>
+        <td class="actions-column column6" >
+            <!-- Cancel -->
+            <span id="cancel-new" onclick="change_row_visibility(false)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-new" onclick="insert_row('servicos', 3)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+<!-- Query rows -->
+{% for id, descricao, valor, especialidade, skill_id in rows: %}
+    <tr style="font-size: 0.9em;">
+        <td class="column1">
+            <span style="display:block;" class="md-size-field visible-field-{{id}}">{{descricao}}</span>
+            <input type="text" class="md-size-field hidden-field" name="descricao" value="{{descricao}}" id="col1-{{id}}" />
+        </td>
+        <td class="column3">
+            <span style="display:block;" class="visible-field-{{id}}">{{valor}}</span>
+            <input type="number" class="hidden-field" name="valor" value="{{valor}}" id="col2-{{id}}" />
+        </td>
+        <td class="column3">
+            <span style="display:block;" class="visible-field-{{id}}">{{especialidade}}</span>
+            <span id="col4-{{id}}" style="display: none;">
+                <!-- New skill field -->
+                <span id="new-skill-query" style="display:none;">
+                    <input type="text" id='new-skill-query-value' name="new-skill" style="display: inline;" />
+                    <!-- Cancel -->
+                    <span id="cancel-new-skill-query" onclick="swap_elements_visibility('#new-skill-query', '#skills-query');" style="display: inline;bottom: 0.2em;">
+                        <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+                    </span>
+                    <!-- Save -->
+                    <span id="save-new-skill-query" onclick="insert_combo_value('especialidade', 'cod_especialidade', 'descricao', $('#new-skill-query-value').val(), '.skills'); swap_elements_visibility('#new-skill-query', '#skills-query');" style="display: inline;bottom: 0.2em;">
+                        <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+                    </span>
+                </span>
+                <!-- Query skill field -->
+                <select class="custom-select skills" id="skills-query" onchange="new_option_field(this, '#skills-query', '#new-skill-query', '#delete-skill-query', '#col3-{{id}}');" style="width:80%;">
+                    {% with default=skill_id %}
+                        {% include "combo_box_template.html" %}
+                    {% endwith %}
+                </select>
+                <!-- Skill value to be updated -->
+                <input type="hidden" value="{{skill_id}}" name="cod_especialidade" id="col3-{{id}}">
+                <!-- Delete -->
+                <span id="delete-skill-query" onclick="delete_row('especialidade', 'cod_especialidade', $('#skills-query').children('option:selected').val(), '.skills')" style="display:inline;">
+                    <img class="actions-icon" src="{{ url_for('static', filename='images/delete.png') }}" />
+                </span>
+            </span>
+        </td>
+        <td class="actions-column column6">
+            <!-- Edit -->
+            <span id="edit-{{id}}" onclick="change_fields_visibility('{{id}}', true)">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/edit.png') }}" />
+            </span>
+            <!-- Delete -->
+            <span id="delete-{{id}}" onclick="delete_row('servicos', 'cod_servico', '{{id}}')">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/delete.png') }}" />
+            </span>
+            <!-- Cancel -->
+            <span id="cancel-{{id}}" onclick="change_fields_visibility('{{id}}', false)" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/cancel.png') }}" />
+            </span>
+            <!-- Save -->
+            <span id="save-{{id}}" onclick="update_row('{{id}}', 'servicos', 'cod_servico', 3, 'int8')" style="display: none;">
+                <img class="actions-icon" src="{{ url_for('static', filename='images/save.png') }}" />
+            </span>
+        </td>
+    </tr>
+{% endfor %}

@@ -1,0 +1,34 @@
+{% extends "head.html" %}
+
+{% include "header-menu.html" %}
+
+{% block body %}
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100" style="text-align: center;">
+            <div class="table100">
+                    <div style="margin-bottom: 5%;" id="index-title">
+                        <h1 style="">{{ title }}</h1>
+                    </div>
+                    <button type="submit" class="index-buttons btn btn-outline-success">
+                        <a href="{{ url_for('new_tuning_page') }}">NOVA PERSONALIZAÇÃO</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-success">
+                        <a href="{{ url_for('tunning_page') }}">PERSONALIZAÇÕES</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('receivables_page') }}">FINANCEIRO</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('vehicles_customers_page') }}">VEÍCULOS PROPRIETÁRIOS</a>
+                    </button><br><br>
+                    <button type="submit" class="index-buttons btn btn-outline-secondary">
+                        <a href="{{ url_for('customers_page') }}">CLIENTES</a>
+                    </button><br><br>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

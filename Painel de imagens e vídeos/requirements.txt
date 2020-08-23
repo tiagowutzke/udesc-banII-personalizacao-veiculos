@@ -1,4 +1,0 @@
-flask
-psycopg2
-flask_cors
-boto3==1.12.39

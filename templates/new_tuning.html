@@ -1,0 +1,185 @@
+{% extends "head.html" %}
+
+{% include "header-menu.html" %}
+
+{% block body %}
+<body>
+
+<div class="limiter">
+    <div class="container-table100">
+        <div class="wrap-table100">
+            <div class="table100">
+                <form action="{{ route }}" method="post">
+                    <div class="div-new-tunning">
+                        <h1>{{ title }}</h1>
+                        {% if default['customer'] %}
+                            {% set functions = 'delete_row_quiet("personalizacoes", "cod_personalizacao", "' + default['tunning_id'] + '"); submit_new_tunning();' %}
+                        {% else %}
+                            {% set functions = 'submit_new_tunning();' %}
+                        {% endif %}
+                        <button disabled id="submit-tunning" style="border-width: 2px; margin-left: 23em; height: 3em; padding: 0.3em;" type="button" onclick="{{functions}}" class="btn btn-outline-success">Salvar personalização</button>
+                    </div>
+                    <!-- Total value and quota quantity -->
+                    <div class="div-new-tunning">
+                        <div>
+                            <label>Quantidade de parcelas</label>
+                            <input type="number" value="{{default['quotas'] or 1}}" class="sm-size-field" style="text-align:center;" name="quantidade" id="quota-quantity" />
+                        </div>
+                        <div style="margin-left: 35em;display:grid;">
+                            <span style="font-size:0.7em;">Valor total:</span>
+                            <span style="font-size: 1.3em;">
+                                R$ <span id="tunning-value">{{ default['value'] or '0,00' }}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- Customer and vehicle -->
+                    <div style="display: flex;">
+                        <!-- Customer -->
+                        <div>
+                            <span><b>Cliente</b></span><br>
+                            <select class="custom-select brands md-size-field" id="customer" onchange="get_combo_values(this, 'new-tuning-vehicle', '#vehicle');" style="margin-right: 2em;">
+                                <option selected disabled>Escolha um cliente</option>
+                                {% with combo_box=combo_box_customers, default=default['customer'] %}
+                                    {% include "combo_box_template.html" %}
+                                {% endwith %}
+                            </select>
+                        </div>
+                        <!-- Vehicle -->
+                        <div>
+                            <span><b>Veículo</b></span><br>
+                            <input type="hidden" name="placa" id="plate"/>
+                            <select class="custom-select brands sm3x-size-field" id="vehicle" onchange="set_hidden_value(this, '#plate');">
+                                <option>Escolha um cliente</option>
+                            </select>
+                        </div>
+                        <!-- Date -->
+                        <div class="form-group" style="margin-left:2em;">
+                         <span><b>Data</b></span><br>
+                         <input style="border: 1px solid rgba(0,0,0,.15) !important; height:2.4em;" type="date" name="data" min="2000-01-01" max="3000-12-31" value="{{default['date']}}" class="form-control">
+                        </div>
+                    </div>
+                    <!-- SERVICES -->
+                    <h5 class="sub-title">Adicionar serviços</h5>
+                    <!-- Skills and services -->
+                    <div style="display: flex;">
+                        <!-- Skills -->
+                        <div>
+                            <span><b>Especialidade</b></span><br>
+                            <select class="custom-select brands sm3x-size-field" id="skills" onchange="get_combo_values(this, 'new-tuning-services', '#services'); get_combo_values(this, 'new-tuning-mechanics', '#mechanics');" style="margin-right: 2em;">
+                                <option selected disabled>Escolha uma especialidade</option>
+                                {% with combo_box=combo_box_skills %}
+                                    {% include "combo_box_template.html" %}
+                                {% endwith %}
+                            </select>
+                        </div>
+                        <!-- Services -->
+                        <div>
+                            <span><b>Serviços</b></span><br>
+                            <input type="hidden" name="cod_servico" id="service_id"/>
+                            <select class="custom-select brands md-size-field" id="services" onchange="set_hidden_value(this, '#service_id');" style="margin-right: 2em;">
+                                <option>Escolha uma especialidade</option>
+                            </select>
+                        </div>
+                        <!-- Mechanics -->
+                        <div>
+                            <span><b>Mecânico</b></span><br>
+                            <input type="hidden" name="cod_mecanico" id="mechanic_id"/>
+                            <select class="custom-select brands sm3x-size-field" id="mechanics" onchange="set_hidden_value(this, '#mechanic_id');">
+                                <option>Escolha uma especialidade</option>
+                            </select>
+                        </div>
+                        <!-- Button ADD -->
+                        <div>
+                            <button style="border-width: 2px; margin: 2em 0 0 1em; height: 2.1em; padding: 0.3em;" type="button" onclick="add_service()" class="btn btn-outline-success">Adicionar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <table style="margin-top:1em;border:none; width: 52em; margin-left: 0;">
+                            <thead>
+                                <tr class="table100-head" style="background: #bfbfbf; height: 2em;">
+                                    <th class="column1">Serviço</th>
+                                    <th class="column3">Mecânico</th>
+                                    <th class="column3">Valor</th>
+                                    <th class="column6"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody"></tbody>
+                        </table>
+                    </div>
+                    <!-- AUTO PARTS -->
+                    <h5 class="sub-title">Adicionar peças</h5>
+                    <div style="display: flex;">
+                        <div>
+                            <span><b>Peças</b></span><br>
+                            <select class="custom-select brands md-size-field" id="parts"  style="margin-right: 2em;">
+                                <option selected disabled>Escolha uma peça</option>
+                                {% with combo_box=combo_box_parts %}
+                                    {% include "combo_box_multi_template.html" %}
+                                {% endwith %}
+                            </select>
+                        </div>
+                        <!-- Button ADD -->
+                        <div>
+                            <button style="border-width: 2px; margin: 2em 0 0 1em; height: 2.1em; padding: 0.3em;" type="button" onclick="add_parts()" class="btn btn-outline-success">Adicionar</button>
+                        </div>
+                    </div>
+                    <div>
+                        <table style="margin-top:1em;border:none; width: 52em; margin-left: 0;">
+                            <thead>
+                                <tr class="table100-head" style="background: #bfbfbf; height: 2em;">
+                                    <th class="column1">Peça</th>
+                                    <th class="column3">Valor</th>
+                                    <th class="column6"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody2"></tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if default['customer'] %}
+    <script>
+        $('#customer').trigger('change');
+        $('#vehicle').val('{{default['vehicle']}}');
+
+        {% for _, service, value, mechanic, service_id, mechanic_id in default['services_details'] %}
+            window.row_index++;
+            service_row = `
+                 <tr id="${window.row_index}">
+                    <td class="column1 service" id="{{service_id}}">{{service}}</td>
+                    <td class="column3 mechanic" id="{{mechanic_id}}">{{mechanic}}</td>
+                    <td class="column3 value">{{value}}</td>
+                    <td class="column3">
+                        <button style="border-width: 2px;font-size: 1em;height: 2em;padding: 0.3em;" onclick="remove_service(${row_index})" class="btn btn-outline-danger">Remover</button>
+                    </td>
+                 </tr>
+            `
+            $('#tbody').append(service_row);
+        {% endfor %}
+
+        {% for _, part, value, part_id in default['parts_details'] %}
+            window.row_index++;
+            parts_row = `
+                 <tr id="${window.row_index}">
+                    <td class="column1 part" id="{{part_id}}">{{part}}</td>
+                    <td class="column3 value">{{value}}</td>
+                    <td class="column3">
+                        <button style="border-width: 2px;font-size: 1em;height: 2em;padding: 0.3em;" onclick="remove_part(${row_index})" class="btn btn-outline-danger">Remover</button>
+                    </td>
+                 </tr>
+            `
+            $('#tbody2').append(parts_row);
+        {% endfor %}
+
+        $('#submit-tunning').prop('disabled', false);
+    </script>
+{% endif %}
+
+</body>
+</html>
+
+{% endblock %}
