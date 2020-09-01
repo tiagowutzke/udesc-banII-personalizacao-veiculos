@@ -1,14 +1,11 @@
--- DROP DATABASE personalizacao_veiculos
 CREATE DATABASE personalizacao_veiculos
 
---DROP TABLE public.especialidade;
 CREATE TABLE public.especialidade (
 	cod_especialidade serial NOT NULL,
 	nome varchar(255) NOT NULL,
 	CONSTRAINT especialidade_pk PRIMARY KEY (cod_especialidade)
 );
 
---DROP TABLE public.servicos;
 CREATE TABLE public.servicos (
 	cod_servico serial NOT NULL,
 	descricao varchar(255) NOT NULL,
@@ -18,7 +15,6 @@ CREATE TABLE public.servicos (
 	CONSTRAINT servicos_fk FOREIGN KEY (cod_especialidade) REFERENCES public.especialidade(cod_especialidade)
 );
 
---DROP TABLE public.mecanicos;
 CREATE TABLE public.mecanicos (
 	cod_mecanico serial NOT NULL,
 	nome varchar(255) NOT NULL,
@@ -27,14 +23,22 @@ CREATE TABLE public.mecanicos (
 	CONSTRAINT mecanicos_fk FOREIGN KEY (cod_especialidade) REFERENCES public.especialidade(cod_especialidade)
 );
 
---DROP TABLE public.marcas;
+
 CREATE TABLE public.marcas (
 	cod_marca serial NOT NULL,
 	descricao varchar(255) NOT NULL,
 	CONSTRAINT marcas_pk PRIMARY KEY (cod_marca)
 );
 
---DROP TABLE public.modelo;
+CREATE TABLE public.personalizacoes_pecas (
+	id serial NOT NULL,
+	cod_personalizacao int8 NOT NULL,
+	cod_peca int8 NOT NULL,
+	CONSTRAINT personalizacoes_pecas_pk PRIMARY KEY (id),
+	CONSTRAINT personalizacoes_pecas_fk_1 FOREIGN KEY (cod_peca) REFERENCES pecas(cod_peca),
+	CONSTRAINT personalizacoes_pecas_personalizacoes_fk FOREIGN KEY (cod_personalizacao) REFERENCES personalizacoes(cod_personalizacao) ON DELETE CASCADE
+);
+
 CREATE TABLE public.modelo (
 	cod_modelo serial NOT NULL,
 	descricao varchar(255) NOT NULL,
@@ -47,7 +51,6 @@ CREATE TABLE public.modelo (
 	CONSTRAINT modelo_fk FOREIGN KEY (cod_marca) REFERENCES public.marcas(cod_marca)
 );
 
---DROP TABLE public.pecas;
 CREATE TABLE public.pecas (
 	cod_peca serial NOT NULL,
 	descricao varchar(255) NOT NULL,
@@ -60,7 +63,6 @@ CREATE TABLE public.pecas (
 	CONSTRAINT pecas_fk FOREIGN KEY (cod_modelo) REFERENCES public.modelo(cod_modelo)
 );
 
---DROP TABLE public.clientes;
 CREATE TABLE public.clientes (
 	cpf varchar(11) NOT NULL,
 	telefone varchar(11) NULL,
@@ -70,7 +72,6 @@ CREATE TABLE public.clientes (
 	CONSTRAINT clientes_pk PRIMARY KEY (cpf)
 );
 
---DROP TABLE public.contas_receber;
 CREATE TABLE public.contas_receber (
 	cod_recebimento serial NOT NULL,
 	data_vencimento date NOT NULL,
@@ -83,7 +84,6 @@ CREATE TABLE public.contas_receber (
 	CONSTRAINT contas_receber_fk FOREIGN KEY (cpf_cliente) REFERENCES public.clientes(cpf)
 );
 
---DROP TABLE public.veiculos;
 CREATE TABLE public.veiculos (
 	chassi varchar(30) NOT NULL,
 	placa varchar(7) NOT NULL,
@@ -98,7 +98,6 @@ CREATE TABLE public.veiculos (
 	CONSTRAINT veiculos_fk_1 FOREIGN KEY (cod_modelo) REFERENCES public.modelo(cod_modelo)
 );
 
---DROP TABLE public.personalizacoes;
 CREATE TABLE public.personalizacoes (
 	cod_personalizacao serial NOT NULL,
 	data date NOT NULL,
@@ -117,7 +116,25 @@ CREATE TABLE public.personalizacoes (
 	CONSTRAINT personalizacoes_servicos_fk FOREIGN KEY (cod_servico) REFERENCES public.servicos(cod_servico)
 );
 
+CREATE TABLE public.personalizacoes_pecas (
+	id serial NOT NULL,
+	cod_personalizacao int8 NOT NULL,
+	cod_peca int8 NOT NULL,
+	CONSTRAINT personalizacoes_pecas_pk PRIMARY KEY (id),
+	CONSTRAINT personalizacoes_pecas_fk_1 FOREIGN KEY (cod_peca) REFERENCES pecas(cod_peca),
+	CONSTRAINT personalizacoes_pecas_personalizacoes_fk FOREIGN KEY (cod_personalizacao) REFERENCES personalizacoes(cod_personalizacao) ON DELETE CASCADE
+);
 
+CREATE TABLE public.personalizacoes_servicos (
+	id serial NOT NULL,
+	cod_personalizacao int8 NOT NULL,
+	cod_servico int8 NOT NULL,
+	cod_mecanico int8 NOT NULL,
+	CONSTRAINT personalizacoes_servicos_pk PRIMARY KEY (id),
+	CONSTRAINT personalizacoes_servicos_fk_1 FOREIGN KEY (cod_servico) REFERENCES servicos(cod_servico),
+	CONSTRAINT personalizacoes_servicos_mecanico_fk FOREIGN KEY (cod_mecanico) REFERENCES mecanicos(cod_mecanico),
+	CONSTRAINT personalizacoes_servicos_personalizacoes_fk FOREIGN KEY (cod_personalizacao) REFERENCES personalizacoes(cod_personalizacao) ON DELETE CASCADE
+);
 
 
 
